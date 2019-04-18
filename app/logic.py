@@ -1,11 +1,9 @@
 import github_wrapper, webdriver_wrapper, mysql_db_wrapper
-import logging
 
 BROWSER = "firefox"
 URL_TO_SCRAPE = "https://github.com/"
 SEARCH_FOR = "selenium"
 PAGES_TO_SCRAPE = 5
-logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 
 def scrape_results():
     scraped_results = []
@@ -43,7 +41,7 @@ if __name__ == "__main__":
         query = "INSERT INTO github_search_results (title, link, description, tags, datetime, language, stars) VALUES (%s, %s, %s, %s, %s, %s, %s)"
         val = (result_obj.title, result_obj.link, result_obj.description, ", ".join(result_obj.tags), result_obj.datetime, result_obj.language, result_obj.stars)
         insert_id = mysql_db_obj.insert_row(query, val)
-        logging.DEBUG("insert 1 row to db with ID: {}".format(insert_id))
+        print("insert 1 row to db with ID: {}".format(insert_id))
         web_driver_obj.navigate_to_url(result_obj.link)
 
     web_driver_obj.close_browser()

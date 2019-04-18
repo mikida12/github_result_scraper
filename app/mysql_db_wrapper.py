@@ -1,7 +1,5 @@
 import mysql.connector
-import logging
 
-logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 
 class MysqlObject:
     def __init__(self, user, password, db_name):
@@ -19,7 +17,7 @@ class MysqlObject:
             query_results = cursor.fetchall()
             cursor.close()
         except Exception as e:
-            logging.ERROR("unable to query db with sql statement {} - {}".format(sql_query, e))
+            print("unable to query db with sql statement {} - {}".format(sql_query, e))
 
         return query_results
 
@@ -32,7 +30,7 @@ class MysqlObject:
             returned_id = cursor.lastrowid
             cursor.close()
         except Exception as e:
-            logging.ERROR("unable to insert sql statement {} with values {} - {}".format(sql_query, query_values, e))
+            print("unable to insert sql statement {} with values {} - {}".format(sql_query, query_values, e))
 
         return returned_id
 
@@ -40,4 +38,4 @@ class MysqlObject:
         try:
             self.connection.close()
         except Exception as e:
-            logging.ERROR("unable to close mysql connection - {}".format(e))
+            print("unable to close mysql connection - {}".format(e))

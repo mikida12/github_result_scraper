@@ -11,9 +11,7 @@ import time
 import re
 import github_wrapper
 from time import sleep
-import logging
 
-logging.basicConfig(level=logging.INFO, format='%(name)s - %(levelname)s - %(message)s')
 
 def timer(func):
     @functools.wraps(func)
@@ -22,7 +20,7 @@ def timer(func):
         value = func(*args, **kwargs)
         end_time = time.perf_counter()
         run_time = end_time - start_time
-        logging.INFO(f"Finished {func.__name__!r} with '{args[1]}' in {run_time:.4f} secs")
+        print(f"Finished {func.__name__!r} with '{args[1]}' in {run_time:.4f} secs")
         return value
     return wrapper_timer
 
@@ -63,7 +61,7 @@ class WebDriverObject:
         try:
             self.driver.get(url)
         except WebDriverException as e:
-            logging.ERROR("error navigating to url '{}' - {}".format(url, e))
+            print("error navigating to url '{}' - {}".format(url, e))
 
     def wait_for(self, element, delay=30):
         WebDriverWait(self.driver, delay).until(EC.visibility_of_element_located((By.XPATH, element)))
@@ -72,14 +70,14 @@ class WebDriverObject:
         try:
             return self.driver.find_element(element_type, element)
         except (ElementNotVisibleException, ElementNotSelectableException, NoSuchElementException, StaleElementReferenceException) as e:
-            logging.ERROR("unable to find element - {}".format(e))
+            print("unable to find element - {}".format(e))
 
     def click_on(self, element, element_type="xpath"):
         try:
             elem = self.find_element_by(element, element_type)
             elem.click()
         except (ElementNotVisibleException, ElementNotSelectableException, NoSuchElementException, StaleElementReferenceException) as e:
-            logging.ERROR("unable to click on element - {}".format(e))
+            print("unable to click on element - {}".format(e))
 
     def type(self, element, element_type, string, clear_field_before=True):
         try:
@@ -87,7 +85,7 @@ class WebDriverObject:
             elem.clear() if clear_field_before else None
             elem.send_keys(string)
         except (ElementNotVisibleException, ElementNotSelectableException, NoSuchElementException, StaleElementReferenceException) as e:
-            logging.ERROR("unable to find element - {}".format(e))
+            print("unable to find element - {}".format(e))
 
     @timer
     def press_key(self, key):
@@ -100,7 +98,7 @@ class WebDriverObject:
             elem = self.find_element_by(element, element_type)
             elem.get_attribute(attribute)
         except (ElementNotVisibleException, ElementNotSelectableException, NoSuchElementException, StaleElementReferenceException) as e:
-            logging.ERROR("unable to get element attribute - {}".format(e))
+            print("unable to get element attribute - {}".format(e))
 
     def wait_for_page_load(self, num_of_attempts=10):
         page_state = False
